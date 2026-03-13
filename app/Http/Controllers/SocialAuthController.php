@@ -12,7 +12,7 @@ class SocialAuthController extends Controller
     /**
      * Supported OAuth providers.
      */
-    private const ALLOWED_PROVIDERS = ['discord', 'spotify'];
+    private const ALLOWED_PROVIDERS = ['discord', 'twitch'];
 
     // ──────────────────────────────────────────────────────────
     //  Step 1 – Redirect the user to the provider's OAuth page
@@ -22,12 +22,13 @@ class SocialAuthController extends Controller
     {
         $this->validateProvider($provider);
 
-        // Spotify requires explicit scopes to get user profile
-        if ($provider === 'spotify') {
+        // Twitch requires explicit scopes to get user profile
+        if ($provider === 'twitch') {
             return Socialite::driver($provider)
-                ->scopes(['user-read-email', 'user-read-private'])
+                ->scopes(['openid'])
                 ->redirect();
         }
+
 
         // Discord: request identify + email
         if ($provider === 'discord') {
